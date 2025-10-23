@@ -167,22 +167,24 @@ See `supabase/migrations/001_initial_schema.sql` for complete schema details.
 
 ```
 hemodialisa/
-├── app/                      # Next.js app directory
-│   ├── dashboard/           # Dashboard pages
-│   │   ├── patients/       # Patient management
-│   │   └── sessions/       # Session tracking
-│   ├── login/              # Authentication pages
-│   ├── signup/
-│   └── auth/
-├── components/
-│   └── ui/                 # shadcn/ui components
-├── lib/
-│   ├── supabase/          # Supabase client setup
-│   ├── ai-prediction.ts   # AI analysis algorithms
-│   └── utils.ts           # Utility functions
+├── src/                      # Source directory
+│   ├── app/                 # Next.js app directory
+│   │   ├── dashboard/      # Dashboard pages
+│   │   │   ├── patients/  # Patient management
+│   │   │   └── sessions/  # Session tracking
+│   │   ├── login/         # Authentication pages
+│   │   ├── signup/
+│   │   └── auth/
+│   ├── components/
+│   │   └── ui/            # shadcn/ui components
+│   ├── lib/
+│   │   ├── supabase/     # Supabase client setup
+│   │   ├── ai-prediction.ts  # AI analysis algorithms
+│   │   └── utils.ts      # Utility functions
+│   └── middleware.ts     # Next.js middleware
 ├── supabase/
-│   └── migrations/        # Database migrations
-└── public/                # Static assets
+│   └── migrations/       # Database migrations
+└── public/               # Static assets
 ```
 
 ## Security
