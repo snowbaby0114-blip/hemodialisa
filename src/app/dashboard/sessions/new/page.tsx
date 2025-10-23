@@ -6,7 +6,8 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Label } from '@/components/ui/label'
+import { ArrowLeft } from 'lucide-react'
 
 export default function NewSessionPage() {
   const router = useRouter()
@@ -152,344 +153,334 @@ export default function NewSessionPage() {
   }
 
   return (
-    <div className="bg-background min-h-screen">
-      <div className="border-b">
-        <div className="container mx-auto px-4 py-4">
-          <Link href="/dashboard/sessions">
-            <Button variant="ghost" size="sm">
-              ← Back to Sessions
-            </Button>
-          </Link>
-        </div>
+    <div className="bg-background flex min-h-screen flex-col">
+      {/* Header */}
+      <div className="border-border bg-background border-b px-12 py-6">
+        <Link
+          href="/dashboard/sessions"
+          className="text-muted-foreground hover:text-foreground mb-4 inline-flex items-center gap-2 text-sm transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Sessions
+        </Link>
+        <h1 className="text-2xl font-semibold">New Dialysis Session</h1>
+        <p className="text-muted-foreground mt-1 text-sm">
+          Record session details and patient vitals
+        </p>
       </div>
 
-      <div className="container mx-auto max-w-4xl px-4 py-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Record Dialysis Session</CardTitle>
-            <CardDescription>Enter session details and patient vitals</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {error && (
-                <div className="text-destructive-foreground bg-destructive/10 border-destructive rounded-md border p-3 text-sm">
-                  {error}
-                </div>
-              )}
-
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Session Information</h3>
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="space-y-2 md:col-span-2">
-                    <label htmlFor="patient_id" className="text-sm font-medium">
-                      Patient *
-                    </label>
-                    <select
-                      id="patient_id"
-                      name="patient_id"
-                      value={formData.patient_id}
-                      onChange={handleChange}
-                      required
-                      className="border-input focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-base shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none md:text-sm"
-                    >
-                      <option value="">Select patient</option>
-                      {patients.map(patient => (
-                        <option key={patient.id} value={patient.id}>
-                          {patient.full_name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="session_date" className="text-sm font-medium">
-                      Session Date *
-                    </label>
-                    <Input
-                      id="session_date"
-                      name="session_date"
-                      type="date"
-                      value={formData.session_date}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="session_start_time" className="text-sm font-medium">
-                      Start Time *
-                    </label>
-                    <Input
-                      id="session_start_time"
-                      name="session_start_time"
-                      type="time"
-                      value={formData.session_start_time}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="session_end_time" className="text-sm font-medium">
-                      End Time
-                    </label>
-                    <Input
-                      id="session_end_time"
-                      name="session_end_time"
-                      type="time"
-                      value={formData.session_end_time}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="duration_minutes" className="text-sm font-medium">
-                      Duration (minutes)
-                    </label>
-                    <Input
-                      id="duration_minutes"
-                      name="duration_minutes"
-                      type="number"
-                      value={formData.duration_minutes}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
+      {/* Content */}
+      <div className="flex-1 px-12 py-8">
+        <div className="mx-auto max-w-3xl">
+          <form onSubmit={handleSubmit} className="space-y-8">
+            {error && (
+              <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+                {error}
               </div>
+            )}
 
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Pre-Dialysis Vitals</h3>
-                <div className="grid gap-4 md:grid-cols-3">
-                  <div className="space-y-2">
-                    <label htmlFor="pre_weight" className="text-sm font-medium">
-                      Weight (kg)
-                    </label>
-                    <Input
-                      id="pre_weight"
-                      name="pre_weight"
-                      type="number"
-                      step="0.01"
-                      value={formData.pre_weight}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="pre_blood_pressure_systolic" className="text-sm font-medium">
-                      BP Systolic
-                    </label>
-                    <Input
-                      id="pre_blood_pressure_systolic"
-                      name="pre_blood_pressure_systolic"
-                      type="number"
-                      value={formData.pre_blood_pressure_systolic}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="pre_blood_pressure_diastolic" className="text-sm font-medium">
-                      BP Diastolic
-                    </label>
-                    <Input
-                      id="pre_blood_pressure_diastolic"
-                      name="pre_blood_pressure_diastolic"
-                      type="number"
-                      value={formData.pre_blood_pressure_diastolic}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="pre_heart_rate" className="text-sm font-medium">
-                      Heart Rate
-                    </label>
-                    <Input
-                      id="pre_heart_rate"
-                      name="pre_heart_rate"
-                      type="number"
-                      value={formData.pre_heart_rate}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="pre_temperature" className="text-sm font-medium">
-                      Temperature (°C)
-                    </label>
-                    <Input
-                      id="pre_temperature"
-                      name="pre_temperature"
-                      type="number"
-                      step="0.1"
-                      value={formData.pre_temperature}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="pre_oxygen_saturation" className="text-sm font-medium">
-                      O2 Saturation (%)
-                    </label>
-                    <Input
-                      id="pre_oxygen_saturation"
-                      name="pre_oxygen_saturation"
-                      type="number"
-                      value={formData.pre_oxygen_saturation}
-                      onChange={handleChange}
-                    />
-                  </div>
+            {/* Session Information */}
+            <div className="space-y-5">
+              <h2 className="text-base font-semibold">Session Information</h2>
+              <div className="grid gap-5 md:grid-cols-2">
+                <div className="space-y-2 md:col-span-2">
+                  <Label htmlFor="patient_id">
+                    Patient <span className="text-red-500">*</span>
+                  </Label>
+                  <select
+                    id="patient_id"
+                    name="patient_id"
+                    value={formData.patient_id}
+                    onChange={handleChange}
+                    required
+                    className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+                  >
+                    <option value="">Select patient</option>
+                    {patients.map(patient => (
+                      <option key={patient.id} value={patient.id}>
+                        {patient.full_name}
+                      </option>
+                    ))}
+                  </select>
                 </div>
-              </div>
-
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Post-Dialysis Vitals</h3>
-                <div className="grid gap-4 md:grid-cols-3">
-                  <div className="space-y-2">
-                    <label htmlFor="post_weight" className="text-sm font-medium">
-                      Weight (kg)
-                    </label>
-                    <Input
-                      id="post_weight"
-                      name="post_weight"
-                      type="number"
-                      step="0.01"
-                      value={formData.post_weight}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="post_blood_pressure_systolic" className="text-sm font-medium">
-                      BP Systolic
-                    </label>
-                    <Input
-                      id="post_blood_pressure_systolic"
-                      name="post_blood_pressure_systolic"
-                      type="number"
-                      value={formData.post_blood_pressure_systolic}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="post_blood_pressure_diastolic" className="text-sm font-medium">
-                      BP Diastolic
-                    </label>
-                    <Input
-                      id="post_blood_pressure_diastolic"
-                      name="post_blood_pressure_diastolic"
-                      type="number"
-                      value={formData.post_blood_pressure_diastolic}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Dialysis Parameters</h3>
-                <div className="grid gap-4 md:grid-cols-3">
-                  <div className="space-y-2">
-                    <label htmlFor="ultrafiltration_goal" className="text-sm font-medium">
-                      UF Goal (L)
-                    </label>
-                    <Input
-                      id="ultrafiltration_goal"
-                      name="ultrafiltration_goal"
-                      type="number"
-                      step="0.01"
-                      value={formData.ultrafiltration_goal}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="ultrafiltration_achieved" className="text-sm font-medium">
-                      UF Achieved (L)
-                    </label>
-                    <Input
-                      id="ultrafiltration_achieved"
-                      name="ultrafiltration_achieved"
-                      type="number"
-                      step="0.01"
-                      value={formData.ultrafiltration_achieved}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="blood_flow_rate" className="text-sm font-medium">
-                      Blood Flow (ml/min)
-                    </label>
-                    <Input
-                      id="blood_flow_rate"
-                      name="blood_flow_rate"
-                      type="number"
-                      value={formData.blood_flow_rate}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Laboratory Values</h3>
-                <div className="grid gap-4 md:grid-cols-4">
-                  <div className="space-y-2">
-                    <label htmlFor="hemoglobin" className="text-sm font-medium">
-                      Hemoglobin (g/dL)
-                    </label>
-                    <Input
-                      id="hemoglobin"
-                      name="hemoglobin"
-                      type="number"
-                      step="0.1"
-                      value={formData.hemoglobin}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="potassium" className="text-sm font-medium">
-                      Potassium (mEq/L)
-                    </label>
-                    <Input
-                      id="potassium"
-                      name="potassium"
-                      type="number"
-                      step="0.1"
-                      value={formData.potassium}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="sodium" className="text-sm font-medium">
-                      Sodium (mEq/L)
-                    </label>
-                    <Input
-                      id="sodium"
-                      name="sodium"
-                      type="number"
-                      step="0.1"
-                      value={formData.sodium}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="pre_bun" className="text-sm font-medium">
-                      Pre BUN
-                    </label>
-                    <Input
-                      id="pre_bun"
-                      name="pre_bun"
-                      type="number"
-                      step="0.1"
-                      value={formData.pre_bun}
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Session Outcome</h3>
                 <div className="space-y-2">
-                  <label htmlFor="patient_tolerance" className="text-sm font-medium">
-                    Patient Tolerance
-                  </label>
+                  <Label htmlFor="session_date">
+                    Session Date <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="session_date"
+                    name="session_date"
+                    type="date"
+                    value={formData.session_date}
+                    onChange={handleChange}
+                    required
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="session_start_time">
+                    Start Time <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="session_start_time"
+                    name="session_start_time"
+                    type="time"
+                    value={formData.session_start_time}
+                    onChange={handleChange}
+                    required
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="session_end_time">End Time</Label>
+                  <Input
+                    id="session_end_time"
+                    name="session_end_time"
+                    type="time"
+                    value={formData.session_end_time}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="duration_minutes">Duration (minutes)</Label>
+                  <Input
+                    id="duration_minutes"
+                    name="duration_minutes"
+                    type="number"
+                    value={formData.duration_minutes}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Pre-Dialysis Vitals */}
+            <div className="space-y-5">
+              <h2 className="text-base font-semibold">Pre-Dialysis Vitals</h2>
+              <div className="grid gap-5 md:grid-cols-3">
+                <div className="space-y-2">
+                  <Label htmlFor="pre_weight">Weight (kg)</Label>
+                  <Input
+                    id="pre_weight"
+                    name="pre_weight"
+                    type="number"
+                    step="0.01"
+                    value={formData.pre_weight}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="pre_blood_pressure_systolic">BP Systolic</Label>
+                  <Input
+                    id="pre_blood_pressure_systolic"
+                    name="pre_blood_pressure_systolic"
+                    type="number"
+                    value={formData.pre_blood_pressure_systolic}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="pre_blood_pressure_diastolic">BP Diastolic</Label>
+                  <Input
+                    id="pre_blood_pressure_diastolic"
+                    name="pre_blood_pressure_diastolic"
+                    type="number"
+                    value={formData.pre_blood_pressure_diastolic}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="pre_heart_rate">Heart Rate</Label>
+                  <Input
+                    id="pre_heart_rate"
+                    name="pre_heart_rate"
+                    type="number"
+                    value={formData.pre_heart_rate}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="pre_temperature">Temperature (°C)</Label>
+                  <Input
+                    id="pre_temperature"
+                    name="pre_temperature"
+                    type="number"
+                    step="0.1"
+                    value={formData.pre_temperature}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="pre_oxygen_saturation">O2 Saturation (%)</Label>
+                  <Input
+                    id="pre_oxygen_saturation"
+                    name="pre_oxygen_saturation"
+                    type="number"
+                    value={formData.pre_oxygen_saturation}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Post-Dialysis Vitals */}
+            <div className="space-y-5">
+              <h2 className="text-base font-semibold">Post-Dialysis Vitals</h2>
+              <div className="grid gap-5 md:grid-cols-3">
+                <div className="space-y-2">
+                  <Label htmlFor="post_weight">Weight (kg)</Label>
+                  <Input
+                    id="post_weight"
+                    name="post_weight"
+                    type="number"
+                    step="0.01"
+                    value={formData.post_weight}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="post_blood_pressure_systolic">BP Systolic</Label>
+                  <Input
+                    id="post_blood_pressure_systolic"
+                    name="post_blood_pressure_systolic"
+                    type="number"
+                    value={formData.post_blood_pressure_systolic}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="post_blood_pressure_diastolic">BP Diastolic</Label>
+                  <Input
+                    id="post_blood_pressure_diastolic"
+                    name="post_blood_pressure_diastolic"
+                    type="number"
+                    value={formData.post_blood_pressure_diastolic}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Dialysis Parameters */}
+            <div className="space-y-5">
+              <h2 className="text-base font-semibold">Dialysis Parameters</h2>
+              <div className="grid gap-5 md:grid-cols-3">
+                <div className="space-y-2">
+                  <Label htmlFor="ultrafiltration_goal">UF Goal (L)</Label>
+                  <Input
+                    id="ultrafiltration_goal"
+                    name="ultrafiltration_goal"
+                    type="number"
+                    step="0.01"
+                    value={formData.ultrafiltration_goal}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="ultrafiltration_achieved">UF Achieved (L)</Label>
+                  <Input
+                    id="ultrafiltration_achieved"
+                    name="ultrafiltration_achieved"
+                    type="number"
+                    step="0.01"
+                    value={formData.ultrafiltration_achieved}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="blood_flow_rate">Blood Flow (ml/min)</Label>
+                  <Input
+                    id="blood_flow_rate"
+                    name="blood_flow_rate"
+                    type="number"
+                    value={formData.blood_flow_rate}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Laboratory Values */}
+            <div className="space-y-5">
+              <h2 className="text-base font-semibold">Laboratory Values</h2>
+              <div className="grid gap-5 md:grid-cols-4">
+                <div className="space-y-2">
+                  <Label htmlFor="hemoglobin">Hemoglobin (g/dL)</Label>
+                  <Input
+                    id="hemoglobin"
+                    name="hemoglobin"
+                    type="number"
+                    step="0.1"
+                    value={formData.hemoglobin}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="potassium">Potassium (mEq/L)</Label>
+                  <Input
+                    id="potassium"
+                    name="potassium"
+                    type="number"
+                    step="0.1"
+                    value={formData.potassium}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="sodium">Sodium (mEq/L)</Label>
+                  <Input
+                    id="sodium"
+                    name="sodium"
+                    type="number"
+                    step="0.1"
+                    value={formData.sodium}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="pre_bun">Pre BUN</Label>
+                  <Input
+                    id="pre_bun"
+                    name="pre_bun"
+                    type="number"
+                    step="0.1"
+                    value={formData.pre_bun}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Session Outcome */}
+            <div className="space-y-5">
+              <h2 className="text-base font-semibold">Session Outcome</h2>
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label htmlFor="patient_tolerance">Patient Tolerance</Label>
                   <select
                     id="patient_tolerance"
                     name="patient_tolerance"
                     value={formData.patient_tolerance}
                     onChange={handleChange}
-                    className="border-input focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-base shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none md:text-sm"
+                    className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
                   >
                     <option value="">Select tolerance</option>
                     <option value="poor">Poor</option>
@@ -499,45 +490,43 @@ export default function NewSessionPage() {
                   </select>
                 </div>
                 <div className="space-y-2">
-                  <label htmlFor="complications" className="text-sm font-medium">
-                    Complications
-                  </label>
+                  <Label htmlFor="complications">Complications</Label>
                   <Input
                     id="complications"
                     name="complications"
                     placeholder="Separate with commas if multiple"
                     value={formData.complications}
                     onChange={handleChange}
+                    className="h-10"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label htmlFor="nurse_notes" className="text-sm font-medium">
-                    Nurse Notes
-                  </label>
+                  <Label htmlFor="nurse_notes">Nurse Notes</Label>
                   <textarea
                     id="nurse_notes"
                     name="nurse_notes"
                     value={formData.nurse_notes}
                     onChange={handleChange}
                     rows={4}
-                    className="border-input focus-visible:ring-ring flex w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none md:text-sm"
+                    className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
                   />
                 </div>
               </div>
+            </div>
 
-              <div className="flex gap-4">
-                <Button type="submit" disabled={loading}>
-                  {loading ? 'Recording...' : 'Record Session'}
+            {/* Actions */}
+            <div className="border-border flex gap-3 border-t pt-6">
+              <Button type="submit" disabled={loading} className="h-10">
+                {loading ? 'Recording...' : 'Record Session'}
+              </Button>
+              <Link href="/dashboard/sessions">
+                <Button type="button" variant="ghost" className="h-10">
+                  Cancel
                 </Button>
-                <Link href="/dashboard/sessions">
-                  <Button type="button" variant="outline">
-                    Cancel
-                  </Button>
-                </Link>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
+              </Link>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   )
