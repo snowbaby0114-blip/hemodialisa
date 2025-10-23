@@ -1,8 +1,10 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { DashboardLayout } from '@/components/layout/dashboard-layout'
+import { Card } from '@/components/ui/card'
 import Link from 'next/link'
+import { Users, Activity, TrendingUp, Plus, ArrowRight } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 
 export default async function DashboardPage() {
   const supabase = await createClient()
@@ -36,90 +38,114 @@ export default async function DashboardPage() {
     .lt('session_date', tomorrow)
 
   return (
-    <div className="bg-background min-h-screen">
-      <div className="border-b">
-        <div className="container mx-auto flex items-center justify-between px-4 py-4">
-          <h1 className="text-2xl font-bold">Hemodialysis Management</h1>
-          <div className="flex items-center gap-2">
-            <span className="text-muted-foreground text-sm">{user.email}</span>
-            <form action="/auth/signout" method="post">
-              <Button variant="outline" size="sm">
-                Sign Out
-              </Button>
-            </form>
+    <DashboardLayout user={user}>
+      <div className="min-h-screen p-8">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="mb-2 text-3xl font-semibold">Dashboard</h1>
+          <p className="text-muted-foreground text-sm">Welcome back, {user.email?.split('@')[0]}</p>
+        </div>
+
+        {/* Stats Grid */}
+        <div className="mb-8 grid gap-4 md:grid-cols-3">
+          <Link href="/dashboard/patients">
+            <Card className="group border-border bg-card cursor-pointer transition-all hover:shadow-md">
+              <div className="p-6">
+                <div className="mb-4 flex items-center justify-between">
+                  <div className="bg-primary/10 text-primary flex h-12 w-12 items-center justify-center rounded-lg">
+                    <Users className="h-6 w-6" />
+                  </div>
+                  <ArrowRight className="text-muted-foreground h-5 w-5 opacity-0 transition-opacity group-hover:opacity-100" />
+                </div>
+                <div className="text-muted-foreground mb-1 text-sm font-medium">Total Patients</div>
+                <div className="text-3xl font-semibold">{patientCount || 0}</div>
+                <p className="text-muted-foreground mt-2 text-xs">Active in system</p>
+              </div>
+            </Card>
+          </Link>
+
+          <Link href="/dashboard/sessions">
+            <Card className="group border-border bg-card cursor-pointer transition-all hover:shadow-md">
+              <div className="p-6">
+                <div className="mb-4 flex items-center justify-between">
+                  <div className="bg-success/10 text-success flex h-12 w-12 items-center justify-center rounded-lg">
+                    <Activity className="h-6 w-6" />
+                  </div>
+                  <ArrowRight className="text-muted-foreground h-5 w-5 opacity-0 transition-opacity group-hover:opacity-100" />
+                </div>
+                <div className="text-muted-foreground mb-1 text-sm font-medium">Total Sessions</div>
+                <div className="text-3xl font-semibold">{sessionCount || 0}</div>
+                <p className="text-muted-foreground mt-2 text-xs">All time recorded</p>
+              </div>
+            </Card>
+          </Link>
+
+          <Card className="border-border bg-card">
+            <div className="p-6">
+              <div className="mb-4 flex items-center justify-between">
+                <div className="bg-warning/10 text-warning flex h-12 w-12 items-center justify-center rounded-lg">
+                  <TrendingUp className="h-6 w-6" />
+                </div>
+              </div>
+              <div className="text-muted-foreground mb-1 text-sm font-medium">Today's Sessions</div>
+              <div className="text-3xl font-semibold">{todaySessionCount || 0}</div>
+              <p className="text-muted-foreground mt-2 text-xs">Scheduled for today</p>
+            </div>
+          </Card>
+        </div>
+
+        {/* Quick Actions */}
+        <div className="mb-8">
+          <h2 className="mb-4 text-lg font-semibold">Quick Actions</h2>
+          <div className="grid gap-4 md:grid-cols-2">
+            <Link href="/dashboard/patients/new">
+              <Card className="group border-border bg-card cursor-pointer transition-all hover:shadow-md">
+                <div className="flex items-center p-6">
+                  <div className="bg-primary/10 text-primary mr-4 flex h-10 w-10 items-center justify-center rounded-lg">
+                    <Plus className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <div className="mb-1 font-medium">Add New Patient</div>
+                    <p className="text-muted-foreground text-xs">Create a new patient record</p>
+                  </div>
+                </div>
+              </Card>
+            </Link>
+
+            <Link href="/dashboard/sessions/new">
+              <Card className="group border-border bg-card cursor-pointer transition-all hover:shadow-md">
+                <div className="flex items-center p-6">
+                  <div className="bg-success/10 text-success mr-4 flex h-10 w-10 items-center justify-center rounded-lg">
+                    <Plus className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <div className="mb-1 font-medium">Record Session</div>
+                    <p className="text-muted-foreground text-xs">Log a dialysis session</p>
+                  </div>
+                </div>
+              </Card>
+            </Link>
           </div>
         </div>
-      </div>
 
-      <div className="container mx-auto px-4 py-8">
-        <div className="mb-8 grid gap-6 md:grid-cols-3">
-          <Card>
-            <CardHeader>
-              <CardTitle>Total Patients</CardTitle>
-              <CardDescription>Active patients in the system</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-4xl font-bold">{patientCount || 0}</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Total Sessions</CardTitle>
-              <CardDescription>All dialysis sessions recorded</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-4xl font-bold">{sessionCount || 0}</p>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Today's Sessions</CardTitle>
-              <CardDescription>Sessions scheduled for today</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-4xl font-bold">{todaySessionCount || 0}</p>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="grid gap-6 md:grid-cols-2">
-          <Card>
-            <CardHeader>
-              <CardTitle>Patient Management</CardTitle>
-              <CardDescription>View and manage patient records</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <Link href="/dashboard/patients">
-                <Button className="w-full">View Patients</Button>
-              </Link>
+        {/* Getting Started */}
+        {patientCount === 0 && (
+          <Card className="border-border bg-accent/30">
+            <div className="p-6">
+              <h3 className="mb-2 font-semibold">Get Started</h3>
+              <p className="text-muted-foreground mb-4 text-sm">
+                Welcome to your hemodialysis management system. Start by adding your first patient.
+              </p>
               <Link href="/dashboard/patients/new">
-                <Button variant="outline" className="w-full">
-                  Add New Patient
+                <Button size="sm">
+                  <Plus className="mr-2 h-4 w-4" />
+                  Add Your First Patient
                 </Button>
               </Link>
-            </CardContent>
+            </div>
           </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Dialysis Sessions</CardTitle>
-              <CardDescription>Track and record dialysis sessions</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-2">
-              <Link href="/dashboard/sessions">
-                <Button className="w-full">View Sessions</Button>
-              </Link>
-              <Link href="/dashboard/sessions/new">
-                <Button variant="outline" className="w-full">
-                  Record New Session
-                </Button>
-              </Link>
-            </CardContent>
-          </Card>
-        </div>
+        )}
       </div>
-    </div>
+    </DashboardLayout>
   )
 }
