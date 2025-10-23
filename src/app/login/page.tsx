@@ -6,7 +6,8 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Label } from '@/components/ui/label'
+import { Heart, ArrowLeft } from 'lucide-react'
 
 export default function LoginPage() {
   const [email, setEmail] = useState('')
@@ -39,59 +40,79 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="bg-secondary flex min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader>
-          <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>
-            Enter your credentials to access the hemodialysis management system
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={handleLogin} className="space-y-4">
+    <div className="bg-background flex min-h-screen flex-col">
+      {/* Header */}
+      <header className="border-border border-b">
+        <div className="container mx-auto flex h-16 items-center justify-between px-6">
+          <Link href="/" className="flex items-center gap-2 transition-opacity hover:opacity-70">
+            <Heart className="text-primary h-6 w-6" />
+            <span className="text-lg font-semibold">Hemodialysis</span>
+          </Link>
+          <Link href="/">
+            <Button variant="ghost" size="sm" className="gap-2">
+              <ArrowLeft className="h-4 w-4" />
+              Back to Home
+            </Button>
+          </Link>
+        </div>
+      </header>
+
+      {/* Main Content */}
+      <div className="flex flex-1 items-center justify-center p-6">
+        <div className="w-full max-w-md">
+          <div className="mb-8 text-center">
+            <h1 className="mb-2 text-3xl font-semibold">Welcome back</h1>
+            <p className="text-muted-foreground text-sm">Sign in to your account to continue</p>
+          </div>
+
+          <form onSubmit={handleLogin} className="space-y-5">
             {error && (
-              <div className="text-destructive-foreground bg-destructive/10 border-destructive rounded-md border p-3 text-sm">
+              <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
                 {error}
               </div>
             )}
+
             <div className="space-y-2">
-              <label htmlFor="email" className="text-sm font-medium">
-                Email
-              </label>
+              <Label htmlFor="email">Email</Label>
               <Input
                 id="email"
                 type="email"
-                placeholder="your@email.com"
+                placeholder="name@example.com"
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 required
+                className="h-10"
               />
             </div>
+
             <div className="space-y-2">
-              <label htmlFor="password" className="text-sm font-medium">
-                Password
-              </label>
+              <Label htmlFor="password">Password</Label>
               <Input
                 id="password"
                 type="password"
-                placeholder="••••••••"
+                placeholder="Enter your password"
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 required
+                className="h-10"
               />
             </div>
-            <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Logging in...' : 'Login'}
+
+            <Button type="submit" className="h-10 w-full" disabled={loading}>
+              {loading ? 'Signing in...' : 'Sign in'}
             </Button>
-            <p className="text-muted-foreground text-center text-sm">
-              Don't have an account?{' '}
-              <Link href="/signup" className="text-primary hover:underline">
-                Sign up
-              </Link>
-            </p>
+
+            <div className="text-center">
+              <p className="text-muted-foreground text-sm">
+                Don't have an account?{' '}
+                <Link href="/signup" className="text-primary font-medium hover:underline">
+                  Sign up
+                </Link>
+              </p>
+            </div>
           </form>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
     </div>
   )
 }

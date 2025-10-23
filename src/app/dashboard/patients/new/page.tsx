@@ -1,12 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Label } from '@/components/ui/label'
+import { ArrowLeft } from 'lucide-react'
 
 export default function NewPatientPage() {
   const router = useRouter()
@@ -93,281 +94,273 @@ export default function NewPatientPage() {
   }
 
   return (
-    <div className="bg-background min-h-screen">
-      <div className="border-b">
-        <div className="container mx-auto px-4 py-4">
-          <Link href="/dashboard/patients">
-            <Button variant="ghost" size="sm">
-              ← Back to Patients
-            </Button>
-          </Link>
-        </div>
+    <div className="bg-background flex min-h-screen flex-col">
+      {/* Header */}
+      <div className="border-border bg-background border-b px-12 py-6">
+        <Link
+          href="/dashboard/patients"
+          className="text-muted-foreground hover:text-foreground mb-4 inline-flex items-center gap-2 text-sm transition-colors"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Patients
+        </Link>
+        <h1 className="text-2xl font-semibold">New Patient</h1>
+        <p className="text-muted-foreground mt-1 text-sm">
+          Enter patient information to create a new record
+        </p>
       </div>
 
-      <div className="container mx-auto max-w-4xl px-4 py-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>Add New Patient</CardTitle>
-            <CardDescription>Enter patient information to create a new record</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {error && (
-                <div className="text-destructive-foreground bg-destructive/10 border-destructive rounded-md border p-3 text-sm">
-                  {error}
-                </div>
-              )}
+      {/* Content */}
+      <div className="flex-1 px-12 py-8">
+        <div className="mx-auto max-w-3xl">
+          <form onSubmit={handleSubmit} className="space-y-8">
+            {error && (
+              <div className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+                {error}
+              </div>
+            )}
 
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Personal Information</h3>
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <label htmlFor="full_name" className="text-sm font-medium">
-                      Full Name *
-                    </label>
-                    <Input
-                      id="full_name"
-                      name="full_name"
-                      value={formData.full_name}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="date_of_birth" className="text-sm font-medium">
-                      Date of Birth *
-                    </label>
-                    <Input
-                      id="date_of_birth"
-                      name="date_of_birth"
-                      type="date"
-                      value={formData.date_of_birth}
-                      onChange={handleChange}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="gender" className="text-sm font-medium">
-                      Gender
-                    </label>
-                    <select
-                      id="gender"
-                      name="gender"
-                      value={formData.gender}
-                      onChange={handleChange}
-                      className="border-input focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-base shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none md:text-sm"
-                    >
-                      <option value="">Select gender</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                      <option value="other">Other</option>
-                    </select>
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="blood_type" className="text-sm font-medium">
-                      Blood Type
-                    </label>
-                    <Input
-                      id="blood_type"
-                      name="blood_type"
-                      placeholder="e.g., O+"
-                      value={formData.blood_type}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="phone" className="text-sm font-medium">
-                      Phone
-                    </label>
-                    <Input
-                      id="phone"
-                      name="phone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="email" className="text-sm font-medium">
-                      Email
-                    </label>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                    />
-                  </div>
+            {/* Personal Information */}
+            <div className="space-y-5">
+              <h2 className="text-base font-semibold">Personal Information</h2>
+              <div className="grid gap-5 md:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="full_name">
+                    Full Name <span className="text-red-500">*</span>
+                  </Label>
+                  <Input
+                    id="full_name"
+                    name="full_name"
+                    value={formData.full_name}
+                    onChange={handleChange}
+                    required
+                    className="h-10"
+                  />
                 </div>
                 <div className="space-y-2">
-                  <label htmlFor="address" className="text-sm font-medium">
-                    Address
-                  </label>
+                  <Label htmlFor="date_of_birth">
+                    Date of Birth <span className="text-red-500">*</span>
+                  </Label>
                   <Input
-                    id="address"
-                    name="address"
-                    value={formData.address}
+                    id="date_of_birth"
+                    name="date_of_birth"
+                    type="date"
+                    value={formData.date_of_birth}
                     onChange={handleChange}
+                    required
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="gender">Gender</Label>
+                  <select
+                    id="gender"
+                    name="gender"
+                    value={formData.gender}
+                    onChange={handleChange}
+                    className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+                  >
+                    <option value="">Select gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="blood_type">Blood Type</Label>
+                  <Input
+                    id="blood_type"
+                    name="blood_type"
+                    placeholder="e.g., O+"
+                    value={formData.blood_type}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="phone">Phone</Label>
+                  <Input
+                    id="phone"
+                    name="phone"
+                    type="tel"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    className="h-10"
                   />
                 </div>
               </div>
+              <div className="space-y-2">
+                <Label htmlFor="address">Address</Label>
+                <Input
+                  id="address"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  className="h-10"
+                />
+              </div>
+            </div>
 
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Emergency Contact</h3>
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <label htmlFor="emergency_contact_name" className="text-sm font-medium">
-                      Contact Name
-                    </label>
-                    <Input
-                      id="emergency_contact_name"
-                      name="emergency_contact_name"
-                      value={formData.emergency_contact_name}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="emergency_contact_phone" className="text-sm font-medium">
-                      Contact Phone
-                    </label>
-                    <Input
-                      id="emergency_contact_phone"
-                      name="emergency_contact_phone"
-                      type="tel"
-                      value={formData.emergency_contact_phone}
-                      onChange={handleChange}
-                    />
-                  </div>
+            {/* Emergency Contact */}
+            <div className="space-y-5">
+              <h2 className="text-base font-semibold">Emergency Contact</h2>
+              <div className="grid gap-5 md:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="emergency_contact_name">Contact Name</Label>
+                  <Input
+                    id="emergency_contact_name"
+                    name="emergency_contact_name"
+                    value={formData.emergency_contact_name}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="emergency_contact_phone">Contact Phone</Label>
+                  <Input
+                    id="emergency_contact_phone"
+                    name="emergency_contact_phone"
+                    type="tel"
+                    value={formData.emergency_contact_phone}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
                 </div>
               </div>
+            </div>
 
+            {/* Medical Information */}
+            <div className="space-y-5">
+              <h2 className="text-base font-semibold">Medical Information</h2>
               <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Medical Information</h3>
                 <div className="space-y-2">
-                  <label htmlFor="diagnosis" className="text-sm font-medium">
-                    Diagnosis
-                  </label>
+                  <Label htmlFor="diagnosis">Diagnosis</Label>
                   <Input
                     id="diagnosis"
                     name="diagnosis"
                     placeholder="e.g., End-Stage Renal Disease"
                     value={formData.diagnosis}
                     onChange={handleChange}
+                    className="h-10"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label htmlFor="comorbidities" className="text-sm font-medium">
-                    Comorbidities
-                  </label>
+                  <Label htmlFor="comorbidities">Comorbidities</Label>
                   <Input
                     id="comorbidities"
                     name="comorbidities"
                     placeholder="Separate with commas: diabetes, hypertension"
                     value={formData.comorbidities}
                     onChange={handleChange}
+                    className="h-10"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label htmlFor="allergies" className="text-sm font-medium">
-                    Allergies
-                  </label>
+                  <Label htmlFor="allergies">Allergies</Label>
                   <Input
                     id="allergies"
                     name="allergies"
                     placeholder="Separate with commas"
                     value={formData.allergies}
                     onChange={handleChange}
+                    className="h-10"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label htmlFor="medications" className="text-sm font-medium">
-                    Current Medications
-                  </label>
+                  <Label htmlFor="medications">Current Medications</Label>
                   <Input
                     id="medications"
                     name="medications"
                     placeholder="Separate with commas"
                     value={formData.medications}
                     onChange={handleChange}
+                    className="h-10"
                   />
                 </div>
               </div>
+            </div>
 
-              <div className="space-y-4">
-                <h3 className="text-lg font-semibold">Dialysis Information</h3>
-                <div className="grid gap-4 md:grid-cols-2">
-                  <div className="space-y-2">
-                    <label htmlFor="dialysis_access_type" className="text-sm font-medium">
-                      Access Type
-                    </label>
-                    <select
-                      id="dialysis_access_type"
-                      name="dialysis_access_type"
-                      value={formData.dialysis_access_type}
-                      onChange={handleChange}
-                      className="border-input focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-base shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none md:text-sm"
-                    >
-                      <option value="">Select type</option>
-                      <option value="av_fistula">AV Fistula</option>
-                      <option value="av_graft">AV Graft</option>
-                      <option value="catheter">Catheter</option>
-                    </select>
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="dialysis_access_location" className="text-sm font-medium">
-                      Access Location
-                    </label>
-                    <Input
-                      id="dialysis_access_location"
-                      name="dialysis_access_location"
-                      placeholder="e.g., Left forearm"
-                      value={formData.dialysis_access_location}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="dry_weight" className="text-sm font-medium">
-                      Dry Weight (kg)
-                    </label>
-                    <Input
-                      id="dry_weight"
-                      name="dry_weight"
-                      type="number"
-                      step="0.01"
-                      value={formData.dry_weight}
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <label htmlFor="target_ultrafiltration" className="text-sm font-medium">
-                      Target Ultrafiltration (L)
-                    </label>
-                    <Input
-                      id="target_ultrafiltration"
-                      name="target_ultrafiltration"
-                      type="number"
-                      step="0.01"
-                      value={formData.target_ultrafiltration}
-                      onChange={handleChange}
-                    />
-                  </div>
+            {/* Dialysis Information */}
+            <div className="space-y-5">
+              <h2 className="text-base font-semibold">Dialysis Information</h2>
+              <div className="grid gap-5 md:grid-cols-2">
+                <div className="space-y-2">
+                  <Label htmlFor="dialysis_access_type">Access Type</Label>
+                  <select
+                    id="dialysis_access_type"
+                    name="dialysis_access_type"
+                    value={formData.dialysis_access_type}
+                    onChange={handleChange}
+                    className="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+                  >
+                    <option value="">Select type</option>
+                    <option value="av_fistula">AV Fistula</option>
+                    <option value="av_graft">AV Graft</option>
+                    <option value="catheter">Catheter</option>
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="dialysis_access_location">Access Location</Label>
+                  <Input
+                    id="dialysis_access_location"
+                    name="dialysis_access_location"
+                    placeholder="e.g., Left forearm"
+                    value={formData.dialysis_access_location}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="dry_weight">Dry Weight (kg)</Label>
+                  <Input
+                    id="dry_weight"
+                    name="dry_weight"
+                    type="number"
+                    step="0.01"
+                    value={formData.dry_weight}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label htmlFor="target_ultrafiltration">Target Ultrafiltration (L)</Label>
+                  <Input
+                    id="target_ultrafiltration"
+                    name="target_ultrafiltration"
+                    type="number"
+                    step="0.01"
+                    value={formData.target_ultrafiltration}
+                    onChange={handleChange}
+                    className="h-10"
+                  />
                 </div>
               </div>
+            </div>
 
-              <div className="flex gap-4">
-                <Button type="submit" disabled={loading}>
-                  {loading ? 'Creating...' : 'Create Patient'}
+            {/* Actions */}
+            <div className="border-border flex gap-3 border-t pt-6">
+              <Button type="submit" disabled={loading} className="h-10">
+                {loading ? 'Creating...' : 'Create Patient'}
+              </Button>
+              <Link href="/dashboard/patients">
+                <Button type="button" variant="ghost" className="h-10">
+                  Cancel
                 </Button>
-                <Link href="/dashboard/patients">
-                  <Button type="button" variant="outline">
-                    Cancel
-                  </Button>
-                </Link>
-              </div>
-            </form>
-          </CardContent>
-        </Card>
+              </Link>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   )

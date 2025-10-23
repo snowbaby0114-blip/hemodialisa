@@ -1,8 +1,8 @@
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
+import { DashboardLayout } from '@/components/layout/dashboard-layout'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {
   Table,
   TableBody,
@@ -12,6 +12,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
+import { Plus } from 'lucide-react'
 
 export default async function SessionsPage({
   searchParams,
@@ -48,49 +49,47 @@ export default async function SessionsPage({
   const { data: sessions, error } = await query
 
   return (
-    <div className="bg-background min-h-screen">
-      <div className="border-b">
-        <div className="container mx-auto flex items-center justify-between px-4 py-4">
-          <div className="flex items-center gap-4">
-            <Link href="/dashboard">
-              <Button variant="ghost" size="sm">
-                ← Back to Dashboard
+    <DashboardLayout user={user}>
+      <div className="h-full">
+        {/* Header */}
+        <div className="border-border bg-background border-b px-12 py-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <h1 className="text-2xl font-semibold">Dialysis Sessions</h1>
+              <p className="text-muted-foreground mt-1 text-sm">
+                {sessions?.length || 0} session{sessions?.length !== 1 ? 's' : ''} recorded
+              </p>
+            </div>
+            <Link href="/dashboard/sessions/new">
+              <Button className="gap-2">
+                <Plus className="h-4 w-4" />
+                New Session
               </Button>
             </Link>
-            <h1 className="text-2xl font-bold">Dialysis Sessions</h1>
           </div>
-          <Link href="/dashboard/sessions/new">
-            <Button>Record New Session</Button>
-          </Link>
         </div>
-      </div>
 
-      <div className="container mx-auto px-4 py-8">
-        <Card>
-          <CardHeader>
-            <CardTitle>All Sessions</CardTitle>
-            <CardDescription>
-              {sessions?.length || 0} session{sessions?.length !== 1 ? 's' : ''} recorded
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {error && (
-              <div className="text-destructive bg-destructive/10 mb-4 rounded-md p-4">
-                Error loading sessions: {error.message}
-              </div>
-            )}
-            {sessions && sessions.length > 0 ? (
+        {/* Content */}
+        <div className="px-12 py-8">
+          {error && (
+            <div className="mb-6 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
+              Error loading sessions: {error.message}
+            </div>
+          )}
+
+          {sessions && sessions.length > 0 ? (
+            <div className="border-border bg-card overflow-hidden rounded-lg border">
               <Table>
                 <TableHeader>
-                  <TableRow>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Patient</TableHead>
-                    <TableHead>Start Time</TableHead>
-                    <TableHead>Duration</TableHead>
-                    <TableHead>Pre BP</TableHead>
-                    <TableHead>Post BP</TableHead>
-                    <TableHead>UF Achieved</TableHead>
-                    <TableHead>Tolerance</TableHead>
+                  <TableRow className="hover:bg-transparent">
+                    <TableHead className="font-medium">Date</TableHead>
+                    <TableHead className="font-medium">Patient</TableHead>
+                    <TableHead className="font-medium">Start Time</TableHead>
+                    <TableHead className="font-medium">Duration</TableHead>
+                    <TableHead className="font-medium">Pre BP</TableHead>
+                    <TableHead className="font-medium">Post BP</TableHead>
+                    <TableHead className="font-medium">UF Achieved</TableHead>
+                    <TableHead className="font-medium">Tolerance</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -141,24 +140,27 @@ export default async function SessionsPage({
                             {session.patient_tolerance}
                           </Badge>
                         ) : (
-                          <span className="text-muted-foreground">N/A</span>
+                          <span className="text-muted-foreground text-sm">N/A</span>
                         )}
                       </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
-            ) : (
-              <div className="py-12 text-center">
-                <p className="text-muted-foreground mb-4">No sessions found</p>
-                <Link href="/dashboard/sessions/new">
-                  <Button>Record Your First Session</Button>
-                </Link>
-              </div>
-            )}
-          </CardContent>
-        </Card>
+            </div>
+          ) : (
+            <div className="border-border flex flex-col items-center justify-center rounded-lg border border-dashed py-20">
+              <p className="text-muted-foreground mb-4 text-sm">No sessions found</p>
+              <Link href="/dashboard/sessions/new">
+                <Button className="gap-2">
+                  <Plus className="h-4 w-4" />
+                  Record Your First Session
+                </Button>
+              </Link>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </DashboardLayout>
   )
 }
