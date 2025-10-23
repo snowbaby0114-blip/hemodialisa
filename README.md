@@ -79,14 +79,29 @@ This will create:
 
 ### 4. Configure Environment Variables
 
-Create a `.env.local` file in the root directory:
+Copy the example environment file and fill in your Supabase credentials:
 
 ```bash
+cp .env.example .env.local
+```
+
+Then edit `.env.local` with your actual values:
+
+```bash
+# Get these from your Supabase project dashboard
+# Settings > API
 NEXT_PUBLIC_SUPABASE_URL=your-supabase-project-url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
 ```
 
-You can find these values in your Supabase project settings under API.
+**Where to find your credentials:**
+
+1. Go to your Supabase project dashboard
+2. Navigate to Settings > API
+3. Copy the "Project URL" → `NEXT_PUBLIC_SUPABASE_URL`
+4. Copy the "anon/public" key → `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+See [.env.example](./.env.example) for detailed setup instructions and optional variables.
 
 ### 5. Run the Development Server
 
@@ -201,7 +216,13 @@ hemodialisa/
 │   └── middleware.ts     # Next.js middleware
 ├── supabase/
 │   └── migrations/       # Database migrations
-└── public/               # Static assets
+├── public/               # Static assets
+├── .env.example          # Environment variables template
+├── .env.local           # Your local environment (not committed)
+├── .prettierrc          # Prettier configuration
+├── .prettierrc.md       # Prettier documentation
+├── commitlint.config.js # Commit message rules
+└── CONTRIBUTING.md      # Contribution guidelines
 ```
 
 ## Security
