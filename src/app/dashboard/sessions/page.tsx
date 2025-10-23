@@ -3,10 +3,21 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 
-export default async function SessionsPage({ searchParams }: { searchParams: { patient?: string } }) {
+export default async function SessionsPage({
+  searchParams,
+}: {
+  searchParams: { patient?: string }
+}) {
   const supabase = await createClient()
 
   const {
@@ -19,13 +30,15 @@ export default async function SessionsPage({ searchParams }: { searchParams: { p
 
   let query = supabase
     .from('dialysis_sessions')
-    .select(`
+    .select(
+      `
       *,
       patients (
         id,
         full_name
       )
-    `)
+    `
+    )
     .order('session_date', { ascending: false })
 
   if (searchParams.patient) {
@@ -35,12 +48,14 @@ export default async function SessionsPage({ searchParams }: { searchParams: { p
   const { data: sessions, error } = await query
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       <div className="border-b">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+        <div className="container mx-auto flex items-center justify-between px-4 py-4">
           <div className="flex items-center gap-4">
             <Link href="/dashboard">
-              <Button variant="ghost" size="sm">← Back to Dashboard</Button>
+              <Button variant="ghost" size="sm">
+                ← Back to Dashboard
+              </Button>
             </Link>
             <h1 className="text-2xl font-bold">Dialysis Sessions</h1>
           </div>
@@ -60,7 +75,7 @@ export default async function SessionsPage({ searchParams }: { searchParams: { p
           </CardHeader>
           <CardContent>
             {error && (
-              <div className="p-4 text-destructive bg-destructive/10 rounded-md mb-4">
+              <div className="text-destructive bg-destructive/10 mb-4 rounded-md p-4">
                 Error loading sessions: {error.message}
               </div>
             )}
@@ -93,18 +108,25 @@ export default async function SessionsPage({ searchParams }: { searchParams: { p
                         </Link>
                       </TableCell>
                       <TableCell>{session.session_start_time}</TableCell>
-                      <TableCell>{session.duration_minutes ? `${session.duration_minutes} min` : 'N/A'}</TableCell>
+                      <TableCell>
+                        {session.duration_minutes ? `${session.duration_minutes} min` : 'N/A'}
+                      </TableCell>
                       <TableCell>
                         {session.pre_blood_pressure_systolic && session.pre_blood_pressure_diastolic
                           ? `${session.pre_blood_pressure_systolic}/${session.pre_blood_pressure_diastolic}`
                           : 'N/A'}
                       </TableCell>
                       <TableCell>
-                        {session.post_blood_pressure_systolic && session.post_blood_pressure_diastolic
+                        {session.post_blood_pressure_systolic &&
+                        session.post_blood_pressure_diastolic
                           ? `${session.post_blood_pressure_systolic}/${session.post_blood_pressure_diastolic}`
                           : 'N/A'}
                       </TableCell>
-                      <TableCell>{session.ultrafiltration_achieved ? `${session.ultrafiltration_achieved} L` : 'N/A'}</TableCell>
+                      <TableCell>
+                        {session.ultrafiltration_achieved
+                          ? `${session.ultrafiltration_achieved} L`
+                          : 'N/A'}
+                      </TableCell>
                       <TableCell>
                         {session.patient_tolerance ? (
                           <Badge
@@ -112,8 +134,8 @@ export default async function SessionsPage({ searchParams }: { searchParams: { p
                               session.patient_tolerance === 'excellent'
                                 ? 'success'
                                 : session.patient_tolerance === 'poor'
-                                ? 'destructive'
-                                : 'secondary'
+                                  ? 'destructive'
+                                  : 'secondary'
                             }
                           >
                             {session.patient_tolerance}
@@ -127,7 +149,7 @@ export default async function SessionsPage({ searchParams }: { searchParams: { p
                 </TableBody>
               </Table>
             ) : (
-              <div className="text-center py-12">
+              <div className="py-12 text-center">
                 <p className="text-muted-foreground mb-4">No sessions found</p>
                 <Link href="/dashboard/sessions/new">
                   <Button>Record Your First Session</Button>

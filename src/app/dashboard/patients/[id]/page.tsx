@@ -25,7 +25,7 @@ export default async function PatientDetailPage({ params }: { params: { id: stri
 
   if (error || !patient) {
     return (
-      <div className="min-h-screen bg-background flex items-center justify-center">
+      <div className="bg-background flex min-h-screen items-center justify-center">
         <Card className="w-full max-w-md">
           <CardHeader>
             <CardTitle>Patient Not Found</CardTitle>
@@ -92,23 +92,35 @@ export default async function PatientDetailPage({ params }: { params: { id: stri
 
   const getHealthStatusColor = (status: string) => {
     switch (status) {
-      case 'perfect': return 'success'
-      case 'optimal': return 'success'
-      case 'good': return 'success'
-      case 'fair': return 'warning'
-      case 'poor': return 'destructive'
-      case 'critical': return 'destructive'
-      default: return 'secondary'
+      case 'perfect':
+        return 'success'
+      case 'optimal':
+        return 'success'
+      case 'good':
+        return 'success'
+      case 'fair':
+        return 'warning'
+      case 'poor':
+        return 'destructive'
+      case 'critical':
+        return 'destructive'
+      default:
+        return 'secondary'
     }
   }
 
   const getRiskColor = (risk: string) => {
     switch (risk) {
-      case 'low': return 'success'
-      case 'medium': return 'warning'
-      case 'high': return 'destructive'
-      case 'critical': return 'destructive'
-      default: return 'secondary'
+      case 'low':
+        return 'success'
+      case 'medium':
+        return 'warning'
+      case 'high':
+        return 'destructive'
+      case 'critical':
+        return 'destructive'
+      default:
+        return 'secondary'
     }
   }
 
@@ -124,35 +136,41 @@ export default async function PatientDetailPage({ params }: { params: { id: stri
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       <div className="border-b">
         <div className="container mx-auto px-4 py-4">
           <Link href="/dashboard/patients">
-            <Button variant="ghost" size="sm">← Back to Patients</Button>
+            <Button variant="ghost" size="sm">
+              ← Back to Patients
+            </Button>
           </Link>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
+      <div className="container mx-auto max-w-6xl px-4 py-8">
         <div className="mb-6">
-          <h1 className="text-3xl font-bold mb-2">{patient.full_name}</h1>
+          <h1 className="mb-2 text-3xl font-bold">{patient.full_name}</h1>
           <p className="text-muted-foreground">
-            Patient ID: {patient.id.slice(0, 8)}... | Age: {calculateAge(patient.date_of_birth)} years
+            Patient ID: {patient.id.slice(0, 8)}... | Age: {calculateAge(patient.date_of_birth)}{' '}
+            years
           </p>
         </div>
 
         {aiAnalysis && (
-          <div className="grid md:grid-cols-3 gap-6 mb-8">
+          <div className="mb-8 grid gap-6 md:grid-cols-3">
             <Card>
               <CardHeader>
                 <CardTitle>Health Status</CardTitle>
                 <CardDescription>AI-powered health assessment</CardDescription>
               </CardHeader>
               <CardContent>
-                <Badge variant={getHealthStatusColor(aiAnalysis.healthStatus) as any} className="text-lg px-4 py-2">
+                <Badge
+                  variant={getHealthStatusColor(aiAnalysis.healthStatus) as any}
+                  className="px-4 py-2 text-lg"
+                >
                   {aiAnalysis.healthStatus.toUpperCase()}
                 </Badge>
-                <p className="text-sm text-muted-foreground mt-2">
+                <p className="text-muted-foreground mt-2 text-sm">
                   Confidence: {aiAnalysis.confidenceScore.toFixed(0)}%
                 </p>
               </CardContent>
@@ -165,9 +183,10 @@ export default async function PatientDetailPage({ params }: { params: { id: stri
               </CardHeader>
               <CardContent>
                 <p className="text-4xl font-bold">
-                  {aiAnalysis.riskScore.toFixed(1)}<span className="text-xl text-muted-foreground">/100</span>
+                  {aiAnalysis.riskScore.toFixed(1)}
+                  <span className="text-muted-foreground text-xl">/100</span>
                 </p>
-                <p className="text-sm text-muted-foreground mt-2">
+                <p className="text-muted-foreground mt-2 text-sm">
                   Trend: {aiAnalysis.trendDirection}
                 </p>
               </CardContent>
@@ -179,7 +198,10 @@ export default async function PatientDetailPage({ params }: { params: { id: stri
                 <CardDescription>Predicted risk for next dialysis</CardDescription>
               </CardHeader>
               <CardContent>
-                <Badge variant={getRiskColor(aiAnalysis.predictedNextSessionRisk) as any} className="text-lg px-4 py-2">
+                <Badge
+                  variant={getRiskColor(aiAnalysis.predictedNextSessionRisk) as any}
+                  className="px-4 py-2 text-lg"
+                >
                   {aiAnalysis.predictedNextSessionRisk.toUpperCase()}
                 </Badge>
               </CardContent>
@@ -187,7 +209,7 @@ export default async function PatientDetailPage({ params }: { params: { id: stri
           </div>
         )}
 
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
+        <div className="mb-8 grid gap-6 md:grid-cols-2">
           <Card>
             <CardHeader>
               <CardTitle>Personal Information</CardTitle>
@@ -235,7 +257,7 @@ export default async function PatientDetailPage({ params }: { params: { id: stri
           </Card>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
+        <div className="mb-8 grid gap-6 md:grid-cols-2">
           <Card>
             <CardHeader>
               <CardTitle>Medical Information</CardTitle>
@@ -243,36 +265,42 @@ export default async function PatientDetailPage({ params }: { params: { id: stri
             <CardContent className="space-y-3">
               {patient.diagnosis && (
                 <div>
-                  <p className="text-sm text-muted-foreground">Diagnosis</p>
+                  <p className="text-muted-foreground text-sm">Diagnosis</p>
                   <p className="font-medium">{patient.diagnosis}</p>
                 </div>
               )}
               {patient.comorbidities && patient.comorbidities.length > 0 && (
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Comorbidities</p>
+                  <p className="text-muted-foreground mb-1 text-sm">Comorbidities</p>
                   <div className="flex flex-wrap gap-2">
                     {patient.comorbidities.map((condition: string, i: number) => (
-                      <Badge key={i} variant="outline">{condition}</Badge>
+                      <Badge key={i} variant="outline">
+                        {condition}
+                      </Badge>
                     ))}
                   </div>
                 </div>
               )}
               {patient.allergies && patient.allergies.length > 0 && (
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Allergies</p>
+                  <p className="text-muted-foreground mb-1 text-sm">Allergies</p>
                   <div className="flex flex-wrap gap-2">
                     {patient.allergies.map((allergy: string, i: number) => (
-                      <Badge key={i} variant="destructive">{allergy}</Badge>
+                      <Badge key={i} variant="destructive">
+                        {allergy}
+                      </Badge>
                     ))}
                   </div>
                 </div>
               )}
               {patient.medications && patient.medications.length > 0 && (
                 <div>
-                  <p className="text-sm text-muted-foreground mb-1">Current Medications</p>
+                  <p className="text-muted-foreground mb-1 text-sm">Current Medications</p>
                   <div className="flex flex-wrap gap-2">
                     {patient.medications.map((med: string, i: number) => (
-                      <Badge key={i} variant="secondary">{med}</Badge>
+                      <Badge key={i} variant="secondary">
+                        {med}
+                      </Badge>
                     ))}
                   </div>
                 </div>
@@ -287,7 +315,9 @@ export default async function PatientDetailPage({ params }: { params: { id: stri
             <CardContent className="space-y-2">
               <div className="grid grid-cols-2 gap-2 text-sm">
                 <span className="text-muted-foreground">Access Type:</span>
-                <span className="capitalize">{patient.dialysis_access_type?.replace('_', ' ') || 'N/A'}</span>
+                <span className="capitalize">
+                  {patient.dialysis_access_type?.replace('_', ' ') || 'N/A'}
+                </span>
 
                 <span className="text-muted-foreground">Access Location:</span>
                 <span>{patient.dialysis_access_location || 'N/A'}</span>
@@ -296,14 +326,16 @@ export default async function PatientDetailPage({ params }: { params: { id: stri
                 <span>{patient.dry_weight ? `${patient.dry_weight} kg` : 'N/A'}</span>
 
                 <span className="text-muted-foreground">Target UF:</span>
-                <span>{patient.target_ultrafiltration ? `${patient.target_ultrafiltration} L` : 'N/A'}</span>
+                <span>
+                  {patient.target_ultrafiltration ? `${patient.target_ultrafiltration} L` : 'N/A'}
+                </span>
               </div>
             </CardContent>
           </Card>
         </div>
 
         {aiAnalysis && (
-          <div className="grid md:grid-cols-2 gap-6 mb-8">
+          <div className="mb-8 grid gap-6 md:grid-cols-2">
             <Card>
               <CardHeader>
                 <CardTitle>Risk Factors</CardTitle>
@@ -352,15 +384,25 @@ export default async function PatientDetailPage({ params }: { params: { id: stri
               <div className="space-y-4">
                 {sessions.slice(0, 5).map((session: any) => (
                   <div key={session.id} className="border-b pb-3">
-                    <div className="flex justify-between items-start mb-2">
+                    <div className="mb-2 flex items-start justify-between">
                       <div>
-                        <p className="font-medium">{new Date(session.session_date).toLocaleDateString()}</p>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="font-medium">
+                          {new Date(session.session_date).toLocaleDateString()}
+                        </p>
+                        <p className="text-muted-foreground text-sm">
                           {session.session_start_time} - {session.session_end_time || 'In progress'}
                         </p>
                       </div>
                       {session.patient_tolerance && (
-                        <Badge variant={session.patient_tolerance === 'excellent' ? 'success' : session.patient_tolerance === 'poor' ? 'destructive' : 'secondary'}>
+                        <Badge
+                          variant={
+                            session.patient_tolerance === 'excellent'
+                              ? 'success'
+                              : session.patient_tolerance === 'poor'
+                                ? 'destructive'
+                                : 'secondary'
+                          }
+                        >
                           {session.patient_tolerance}
                         </Badge>
                       )}
@@ -376,12 +418,17 @@ export default async function PatientDetailPage({ params }: { params: { id: stri
                       </div>
                       <div>
                         <p className="text-muted-foreground">UF Achieved</p>
-                        <p className="font-medium">{session.ultrafiltration_achieved ? `${session.ultrafiltration_achieved} L` : 'N/A'}</p>
+                        <p className="font-medium">
+                          {session.ultrafiltration_achieved
+                            ? `${session.ultrafiltration_achieved} L`
+                            : 'N/A'}
+                        </p>
                       </div>
                       <div>
                         <p className="text-muted-foreground">Pre BP</p>
                         <p className="font-medium">
-                          {session.pre_blood_pressure_systolic && session.pre_blood_pressure_diastolic
+                          {session.pre_blood_pressure_systolic &&
+                          session.pre_blood_pressure_diastolic
                             ? `${session.pre_blood_pressure_systolic}/${session.pre_blood_pressure_diastolic}`
                             : 'N/A'}
                         </p>
@@ -390,11 +437,13 @@ export default async function PatientDetailPage({ params }: { params: { id: stri
                   </div>
                 ))}
                 <Link href={`/dashboard/sessions?patient=${params.id}`}>
-                  <Button variant="outline" className="w-full">View All Sessions</Button>
+                  <Button variant="outline" className="w-full">
+                    View All Sessions
+                  </Button>
                 </Link>
               </div>
             ) : (
-              <div className="text-center py-8">
+              <div className="py-8 text-center">
                 <p className="text-muted-foreground mb-4">No sessions recorded yet</p>
                 <Link href={`/dashboard/sessions/new?patient=${params.id}`}>
                   <Button>Record First Session</Button>

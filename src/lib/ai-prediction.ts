@@ -155,7 +155,7 @@ function analyzeVitalsTrend(sessions: DialysisSession[]) {
   const issueRate = total > 0 ? issues / total : 0
   return {
     score: issueRate,
-    trend: issueRate < 0.2 ? 'stable' : issueRate < 0.4 ? 'concerning' : 'critical'
+    trend: issueRate < 0.2 ? 'stable' : issueRate < 0.4 ? 'concerning' : 'critical',
   }
 }
 
@@ -183,15 +183,18 @@ function analyzeLabTrend(sessions: DialysisSession[]) {
   const issueRate = total > 0 ? issues / total : 0
   return {
     score: issueRate,
-    trend: issueRate < 0.3 ? 'normal' : issueRate < 0.6 ? 'concerning' : 'abnormal'
+    trend: issueRate < 0.3 ? 'normal' : issueRate < 0.6 ? 'concerning' : 'abnormal',
   }
 }
 
 function calculateAdherenceScore(sessions: DialysisSession[]): number {
   // Expected: 3 sessions per week
-  const weeksSinceFirst = sessions.length > 0
-    ? Math.ceil((Date.now() - new Date(sessions[0].sessionDate).getTime()) / (7 * 24 * 60 * 60 * 1000))
-    : 1
+  const weeksSinceFirst =
+    sessions.length > 0
+      ? Math.ceil(
+          (Date.now() - new Date(sessions[0].sessionDate).getTime()) / (7 * 24 * 60 * 60 * 1000)
+        )
+      : 1
 
   const expectedSessions = weeksSinceFirst * 3
   const adherenceRate = Math.min(sessions.length / expectedSessions, 1)
@@ -227,7 +230,7 @@ function assessHemodynamicStability(sessions: DialysisSession[]) {
 
   return {
     stable: unstableCount < sessions.length * 0.3,
-    score: unstableCount / sessions.length
+    score: unstableCount / sessions.length,
   }
 }
 
@@ -289,7 +292,7 @@ function determineTrendDirection(sessions: DialysisSession[]): HealthAnalysis['t
 
 function calculateConfidence(sessions: DialysisSession[]): number {
   let dataPoints = 0
-  let maxPoints = sessions.length * 10 // Assume 10 key data points per session
+  const maxPoints = sessions.length * 10 // Assume 10 key data points per session
 
   sessions.forEach(session => {
     if (session.preBpSystolic) dataPoints++
@@ -369,7 +372,9 @@ function generateRecommendations(data: any): string[] {
     recommendations.push('Review dialysis access and consider intervention if needed')
   }
 
-  const avgUF = average(data.sessions.map((s: DialysisSession) => s.ultrafiltrationAchieved).filter(Boolean))
+  const avgUF = average(
+    data.sessions.map((s: DialysisSession) => s.ultrafiltrationAchieved).filter(Boolean)
+  )
   if (avgUF && avgUF > 3) {
     recommendations.push('High ultrafiltration volume - assess for fluid overload causes')
   }

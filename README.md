@@ -237,13 +237,26 @@ Automated checks run before commits to maintain code quality:
 
 **Pre-commit:**
 
-- Formats code with Prettier
+- Formats code with Prettier (including automatic Tailwind CSS class sorting)
 - Lints with ESLint (auto-fixes when possible)
 - Type-checks TypeScript files
 
 **Commit-msg:**
 
 - Validates commit message format (Conventional Commits)
+
+### Prettier & Tailwind CSS Class Sorting
+
+This project uses `prettier-plugin-tailwindcss` to automatically sort Tailwind CSS classes in the recommended order, ensuring consistency across the codebase.
+
+```tsx
+// Classes are automatically sorted on save/commit
+<div className="rounded-lg bg-blue-500 px-4 py-2 text-center font-bold text-white">
+  Automatically sorted!
+</div>
+```
+
+See [.prettierrc.md](./.prettierrc.md) for complete formatting configuration.
 
 ### Commit Message Convention
 

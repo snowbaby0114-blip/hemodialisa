@@ -34,7 +34,9 @@ export default function NewPatientPage() {
     target_ultrafiltration: '',
   })
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -47,7 +49,9 @@ export default function NewPatientPage() {
     setLoading(true)
 
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
 
       const { error: insertError } = await supabase.from('patients').insert({
@@ -62,13 +66,19 @@ export default function NewPatientPage() {
         emergency_contact_name: formData.emergency_contact_name || null,
         emergency_contact_phone: formData.emergency_contact_phone || null,
         diagnosis: formData.diagnosis || null,
-        comorbidities: formData.comorbidities ? formData.comorbidities.split(',').map(s => s.trim()) : null,
+        comorbidities: formData.comorbidities
+          ? formData.comorbidities.split(',').map(s => s.trim())
+          : null,
         allergies: formData.allergies ? formData.allergies.split(',').map(s => s.trim()) : null,
-        medications: formData.medications ? formData.medications.split(',').map(s => s.trim()) : null,
+        medications: formData.medications
+          ? formData.medications.split(',').map(s => s.trim())
+          : null,
         dialysis_access_type: formData.dialysis_access_type || null,
         dialysis_access_location: formData.dialysis_access_location || null,
         dry_weight: formData.dry_weight ? parseFloat(formData.dry_weight) : null,
-        target_ultrafiltration: formData.target_ultrafiltration ? parseFloat(formData.target_ultrafiltration) : null,
+        target_ultrafiltration: formData.target_ultrafiltration
+          ? parseFloat(formData.target_ultrafiltration)
+          : null,
       })
 
       if (insertError) throw insertError
@@ -83,16 +93,18 @@ export default function NewPatientPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       <div className="border-b">
         <div className="container mx-auto px-4 py-4">
           <Link href="/dashboard/patients">
-            <Button variant="ghost" size="sm">← Back to Patients</Button>
+            <Button variant="ghost" size="sm">
+              ← Back to Patients
+            </Button>
           </Link>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto max-w-4xl px-4 py-8">
         <Card>
           <CardHeader>
             <CardTitle>Add New Patient</CardTitle>
@@ -101,14 +113,14 @@ export default function NewPatientPage() {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               {error && (
-                <div className="p-3 text-sm text-destructive-foreground bg-destructive/10 border border-destructive rounded-md">
+                <div className="text-destructive-foreground bg-destructive/10 border-destructive rounded-md border p-3 text-sm">
                   {error}
                 </div>
               )}
 
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Personal Information</h3>
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
                     <label htmlFor="full_name" className="text-sm font-medium">
                       Full Name *
@@ -143,7 +155,7 @@ export default function NewPatientPage() {
                       name="gender"
                       value={formData.gender}
                       onChange={handleChange}
-                      className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring md:text-sm"
+                      className="border-input focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-base shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none md:text-sm"
                     >
                       <option value="">Select gender</option>
                       <option value="male">Male</option>
@@ -203,7 +215,7 @@ export default function NewPatientPage() {
 
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Emergency Contact</h3>
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
                     <label htmlFor="emergency_contact_name" className="text-sm font-medium">
                       Contact Name
@@ -284,7 +296,7 @@ export default function NewPatientPage() {
 
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Dialysis Information</h3>
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2">
                     <label htmlFor="dialysis_access_type" className="text-sm font-medium">
                       Access Type
@@ -294,7 +306,7 @@ export default function NewPatientPage() {
                       name="dialysis_access_type"
                       value={formData.dialysis_access_type}
                       onChange={handleChange}
-                      className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring md:text-sm"
+                      className="border-input focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-base shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none md:text-sm"
                     >
                       <option value="">Select type</option>
                       <option value="av_fistula">AV Fistula</option>
@@ -348,7 +360,9 @@ export default function NewPatientPage() {
                   {loading ? 'Creating...' : 'Create Patient'}
                 </Button>
                 <Link href="/dashboard/patients">
-                  <Button type="button" variant="outline">Cancel</Button>
+                  <Button type="button" variant="outline">
+                    Cancel
+                  </Button>
                 </Link>
               </div>
             </form>

@@ -77,7 +77,7 @@ docs(api): add endpoint documentation
 
 ### Code Formatting
 
-We use Prettier for consistent code formatting.
+We use Prettier for consistent code formatting with automatic Tailwind CSS class sorting.
 
 ```bash
 # Format all files
@@ -86,6 +86,30 @@ npm run format
 # Check formatting without modifying files
 npm run format:check
 ```
+
+#### Tailwind CSS Class Sorting
+
+The `prettier-plugin-tailwindcss` automatically sorts your Tailwind classes in the recommended order:
+
+**Before:**
+
+```tsx
+<div className="text-center px-4 py-2 bg-blue-500 text-white font-bold rounded-lg">
+```
+
+**After:**
+
+```tsx
+<div className="rounded-lg bg-blue-500 px-4 py-2 text-center font-bold text-white">
+```
+
+This happens automatically when you:
+
+- Run `npm run format`
+- Commit (via pre-commit hook)
+- Save in your editor (if configured)
+
+See [.prettierrc.md](./.prettierrc.md) for complete configuration details.
 
 ### Linting
 

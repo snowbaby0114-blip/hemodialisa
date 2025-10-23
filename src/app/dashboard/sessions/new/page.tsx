@@ -58,14 +58,13 @@ export default function NewSessionPage() {
   }, [])
 
   const loadPatients = async () => {
-    const { data } = await supabase
-      .from('patients')
-      .select('id, full_name')
-      .order('full_name')
+    const { data } = await supabase.from('patients').select('id, full_name').order('full_name')
     if (data) setPatients(data)
   }
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value,
@@ -78,7 +77,9 @@ export default function NewSessionPage() {
     setLoading(true)
 
     try {
-      const { data: { user } } = await supabase.auth.getUser()
+      const {
+        data: { user },
+      } = await supabase.auth.getUser()
       if (!user) throw new Error('Not authenticated')
 
       const { error: insertError } = await supabase.from('dialysis_sessions').insert({
@@ -89,21 +90,39 @@ export default function NewSessionPage() {
         session_end_time: formData.session_end_time || null,
         duration_minutes: formData.duration_minutes ? parseInt(formData.duration_minutes) : null,
         pre_weight: formData.pre_weight ? parseFloat(formData.pre_weight) : null,
-        pre_blood_pressure_systolic: formData.pre_blood_pressure_systolic ? parseInt(formData.pre_blood_pressure_systolic) : null,
-        pre_blood_pressure_diastolic: formData.pre_blood_pressure_diastolic ? parseInt(formData.pre_blood_pressure_diastolic) : null,
+        pre_blood_pressure_systolic: formData.pre_blood_pressure_systolic
+          ? parseInt(formData.pre_blood_pressure_systolic)
+          : null,
+        pre_blood_pressure_diastolic: formData.pre_blood_pressure_diastolic
+          ? parseInt(formData.pre_blood_pressure_diastolic)
+          : null,
         pre_heart_rate: formData.pre_heart_rate ? parseInt(formData.pre_heart_rate) : null,
         pre_temperature: formData.pre_temperature ? parseFloat(formData.pre_temperature) : null,
-        pre_oxygen_saturation: formData.pre_oxygen_saturation ? parseInt(formData.pre_oxygen_saturation) : null,
+        pre_oxygen_saturation: formData.pre_oxygen_saturation
+          ? parseInt(formData.pre_oxygen_saturation)
+          : null,
         post_weight: formData.post_weight ? parseFloat(formData.post_weight) : null,
-        post_blood_pressure_systolic: formData.post_blood_pressure_systolic ? parseInt(formData.post_blood_pressure_systolic) : null,
-        post_blood_pressure_diastolic: formData.post_blood_pressure_diastolic ? parseInt(formData.post_blood_pressure_diastolic) : null,
+        post_blood_pressure_systolic: formData.post_blood_pressure_systolic
+          ? parseInt(formData.post_blood_pressure_systolic)
+          : null,
+        post_blood_pressure_diastolic: formData.post_blood_pressure_diastolic
+          ? parseInt(formData.post_blood_pressure_diastolic)
+          : null,
         post_heart_rate: formData.post_heart_rate ? parseInt(formData.post_heart_rate) : null,
         post_temperature: formData.post_temperature ? parseFloat(formData.post_temperature) : null,
-        post_oxygen_saturation: formData.post_oxygen_saturation ? parseInt(formData.post_oxygen_saturation) : null,
+        post_oxygen_saturation: formData.post_oxygen_saturation
+          ? parseInt(formData.post_oxygen_saturation)
+          : null,
         blood_flow_rate: formData.blood_flow_rate ? parseInt(formData.blood_flow_rate) : null,
-        dialysate_flow_rate: formData.dialysate_flow_rate ? parseInt(formData.dialysate_flow_rate) : null,
-        ultrafiltration_goal: formData.ultrafiltration_goal ? parseFloat(formData.ultrafiltration_goal) : null,
-        ultrafiltration_achieved: formData.ultrafiltration_achieved ? parseFloat(formData.ultrafiltration_achieved) : null,
+        dialysate_flow_rate: formData.dialysate_flow_rate
+          ? parseInt(formData.dialysate_flow_rate)
+          : null,
+        ultrafiltration_goal: formData.ultrafiltration_goal
+          ? parseFloat(formData.ultrafiltration_goal)
+          : null,
+        ultrafiltration_achieved: formData.ultrafiltration_achieved
+          ? parseFloat(formData.ultrafiltration_achieved)
+          : null,
         heparin_dose: formData.heparin_dose ? parseFloat(formData.heparin_dose) : null,
         hemoglobin: formData.hemoglobin ? parseFloat(formData.hemoglobin) : null,
         potassium: formData.potassium ? parseFloat(formData.potassium) : null,
@@ -115,7 +134,9 @@ export default function NewSessionPage() {
         pre_creatinine: formData.pre_creatinine ? parseFloat(formData.pre_creatinine) : null,
         post_creatinine: formData.post_creatinine ? parseFloat(formData.post_creatinine) : null,
         patient_tolerance: formData.patient_tolerance || null,
-        complications: formData.complications ? formData.complications.split(',').map(s => s.trim()) : null,
+        complications: formData.complications
+          ? formData.complications.split(',').map(s => s.trim())
+          : null,
         nurse_notes: formData.nurse_notes || null,
       })
 
@@ -131,16 +152,18 @@ export default function NewSessionPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       <div className="border-b">
         <div className="container mx-auto px-4 py-4">
           <Link href="/dashboard/sessions">
-            <Button variant="ghost" size="sm">← Back to Sessions</Button>
+            <Button variant="ghost" size="sm">
+              ← Back to Sessions
+            </Button>
           </Link>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <div className="container mx-auto max-w-4xl px-4 py-8">
         <Card>
           <CardHeader>
             <CardTitle>Record Dialysis Session</CardTitle>
@@ -149,14 +172,14 @@ export default function NewSessionPage() {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-6">
               {error && (
-                <div className="p-3 text-sm text-destructive-foreground bg-destructive/10 border border-destructive rounded-md">
+                <div className="text-destructive-foreground bg-destructive/10 border-destructive rounded-md border p-3 text-sm">
                   {error}
                 </div>
               )}
 
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Session Information</h3>
-                <div className="grid md:grid-cols-2 gap-4">
+                <div className="grid gap-4 md:grid-cols-2">
                   <div className="space-y-2 md:col-span-2">
                     <label htmlFor="patient_id" className="text-sm font-medium">
                       Patient *
@@ -167,11 +190,13 @@ export default function NewSessionPage() {
                       value={formData.patient_id}
                       onChange={handleChange}
                       required
-                      className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring md:text-sm"
+                      className="border-input focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-base shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none md:text-sm"
                     >
                       <option value="">Select patient</option>
                       {patients.map(patient => (
-                        <option key={patient.id} value={patient.id}>{patient.full_name}</option>
+                        <option key={patient.id} value={patient.id}>
+                          {patient.full_name}
+                        </option>
                       ))}
                     </select>
                   </div>
@@ -230,7 +255,7 @@ export default function NewSessionPage() {
 
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Pre-Dialysis Vitals</h3>
-                <div className="grid md:grid-cols-3 gap-4">
+                <div className="grid gap-4 md:grid-cols-3">
                   <div className="space-y-2">
                     <label htmlFor="pre_weight" className="text-sm font-medium">
                       Weight (kg)
@@ -310,7 +335,7 @@ export default function NewSessionPage() {
 
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Post-Dialysis Vitals</h3>
-                <div className="grid md:grid-cols-3 gap-4">
+                <div className="grid gap-4 md:grid-cols-3">
                   <div className="space-y-2">
                     <label htmlFor="post_weight" className="text-sm font-medium">
                       Weight (kg)
@@ -353,7 +378,7 @@ export default function NewSessionPage() {
 
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Dialysis Parameters</h3>
-                <div className="grid md:grid-cols-3 gap-4">
+                <div className="grid gap-4 md:grid-cols-3">
                   <div className="space-y-2">
                     <label htmlFor="ultrafiltration_goal" className="text-sm font-medium">
                       UF Goal (L)
@@ -397,7 +422,7 @@ export default function NewSessionPage() {
 
               <div className="space-y-4">
                 <h3 className="text-lg font-semibold">Laboratory Values</h3>
-                <div className="grid md:grid-cols-4 gap-4">
+                <div className="grid gap-4 md:grid-cols-4">
                   <div className="space-y-2">
                     <label htmlFor="hemoglobin" className="text-sm font-medium">
                       Hemoglobin (g/dL)
@@ -464,7 +489,7 @@ export default function NewSessionPage() {
                     name="patient_tolerance"
                     value={formData.patient_tolerance}
                     onChange={handleChange}
-                    className="flex h-9 w-full rounded-md border border-input bg-transparent px-3 py-1 text-base shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring md:text-sm"
+                    className="border-input focus-visible:ring-ring flex h-9 w-full rounded-md border bg-transparent px-3 py-1 text-base shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none md:text-sm"
                   >
                     <option value="">Select tolerance</option>
                     <option value="poor">Poor</option>
@@ -495,7 +520,7 @@ export default function NewSessionPage() {
                     value={formData.nurse_notes}
                     onChange={handleChange}
                     rows={4}
-                    className="flex w-full rounded-md border border-input bg-transparent px-3 py-2 text-base shadow-sm transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring md:text-sm"
+                    className="border-input focus-visible:ring-ring flex w-full rounded-md border bg-transparent px-3 py-2 text-base shadow-sm transition-colors focus-visible:ring-1 focus-visible:outline-none md:text-sm"
                   />
                 </div>
               </div>
@@ -505,7 +530,9 @@ export default function NewSessionPage() {
                   {loading ? 'Recording...' : 'Record Session'}
                 </Button>
                 <Link href="/dashboard/sessions">
-                  <Button type="button" variant="outline">Cancel</Button>
+                  <Button type="button" variant="outline">
+                    Cancel
+                  </Button>
                 </Link>
               </div>
             </form>

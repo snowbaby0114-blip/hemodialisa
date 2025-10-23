@@ -3,7 +3,14 @@ import Link from 'next/link'
 import { createClient } from '@/lib/supabase/server'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 
 export default async function PatientsPage() {
@@ -42,12 +49,14 @@ export default async function PatientsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="bg-background min-h-screen">
       <div className="border-b">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
+        <div className="container mx-auto flex items-center justify-between px-4 py-4">
           <div className="flex items-center gap-4">
             <Link href="/dashboard">
-              <Button variant="ghost" size="sm">← Back to Dashboard</Button>
+              <Button variant="ghost" size="sm">
+                ← Back to Dashboard
+              </Button>
             </Link>
             <h1 className="text-2xl font-bold">Patient Management</h1>
           </div>
@@ -67,7 +76,7 @@ export default async function PatientsPage() {
           </CardHeader>
           <CardContent>
             {error && (
-              <div className="p-4 text-destructive bg-destructive/10 rounded-md mb-4">
+              <div className="text-destructive bg-destructive/10 mb-4 rounded-md p-4">
                 Error loading patients: {error.message}
               </div>
             )}
@@ -102,7 +111,11 @@ export default async function PatientsPage() {
                       </TableCell>
                       <TableCell>
                         {patient.risk_score !== null ? (
-                          <span className={patient.risk_score > 60 ? 'text-destructive font-semibold' : ''}>
+                          <span
+                            className={
+                              patient.risk_score > 60 ? 'text-destructive font-semibold' : ''
+                            }
+                          >
                             {patient.risk_score}/100
                           </span>
                         ) : (
@@ -111,7 +124,9 @@ export default async function PatientsPage() {
                       </TableCell>
                       <TableCell>
                         <Link href={`/dashboard/patients/${patient.id}`}>
-                          <Button variant="outline" size="sm">View Details</Button>
+                          <Button variant="outline" size="sm">
+                            View Details
+                          </Button>
                         </Link>
                       </TableCell>
                     </TableRow>
@@ -119,7 +134,7 @@ export default async function PatientsPage() {
                 </TableBody>
               </Table>
             ) : (
-              <div className="text-center py-12">
+              <div className="py-12 text-center">
                 <p className="text-muted-foreground mb-4">No patients found</p>
                 <Link href="/dashboard/patients/new">
                   <Button>Add Your First Patient</Button>
