@@ -5,12 +5,14 @@ An advanced web application for managing hemodialysis patients with AI-powered h
 ## Features
 
 ### Core Features
+
 - **Patient Management**: Comprehensive patient records with medical history, demographics, and dialysis information
 - **Session Tracking**: Detailed dialysis session recording with pre/post vitals and outcomes
 - **Authentication**: Secure user authentication powered by Supabase
 - **Responsive UI**: Beautiful, accessible interface built with shadcn/ui components
 
 ### AI-Powered Analysis
+
 - **Health Status Classification**: Automated patient health assessment (Perfect, Optimal, Good, Fair, Poor, Critical)
 - **Risk Score Calculation**: 0-100 risk scoring based on multiple health parameters
 - **Trend Analysis**: Track patient health trends (Improving, Stable, Declining, Critical)
@@ -19,6 +21,7 @@ An advanced web application for managing hemodialysis patients with AI-powered h
 - **Risk Factor Identification**: Automated detection of health concerns and complications
 
 ### Analytics
+
 - Dashboard with real-time statistics
 - Patient health trends visualization
 - Session history and analysis
@@ -36,16 +39,19 @@ An advanced web application for managing hemodialysis patients with AI-powered h
 ## Getting Started
 
 ### Prerequisites
+
 - Node.js 18+ installed
 - A Supabase account and project
 
 ### 1. Clone the Repository
+
 ```bash
 git clone <repository-url>
 cd hemodialisa
 ```
 
 ### 2. Install Dependencies
+
 ```bash
 npm install
 ```
@@ -53,14 +59,17 @@ npm install
 ### 3. Set Up Supabase
 
 #### Create a Supabase Project
+
 1. Go to [supabase.com](https://supabase.com) and create a new project
 2. Wait for your project to be set up
 
 #### Run Database Migrations
+
 1. In your Supabase project dashboard, go to the SQL Editor
 2. Copy and run the SQL from `supabase/migrations/001_initial_schema.sql`
 
 This will create:
+
 - `patients` table with AI analysis fields
 - `dialysis_sessions` table with comprehensive session data
 - `patient_health_analytics` table for trend tracking
@@ -90,12 +99,14 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ## Usage
 
 ### First Time Setup
+
 1. Navigate to the home page
 2. Click "Sign Up" to create an account
 3. Fill in your credentials and sign up
 4. You'll be redirected to the dashboard
 
 ### Adding Patients
+
 1. From the dashboard, click "View Patients" or "Add New Patient"
 2. Fill in patient information including:
    - Personal details (name, DOB, contact info)
@@ -104,6 +115,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 3. Click "Create Patient"
 
 ### Recording Dialysis Sessions
+
 1. Navigate to "Dialysis Sessions" from the dashboard
 2. Click "Record New Session"
 3. Select the patient
@@ -114,9 +126,10 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
    - Dialysis parameters (UF goal/achieved, blood flow rate)
    - Laboratory values (hemoglobin, potassium, sodium, BUN, etc.)
    - Session outcome (tolerance, complications, notes)
-4. Click "Record Session"
+5. Click "Record Session"
 
 ### Viewing AI Analysis
+
 1. Go to the patient detail page by clicking on a patient
 2. The system will automatically analyze all session data and display:
    - Current health status
@@ -131,6 +144,7 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 The system uses a multi-factor analysis approach:
 
 ### Input Parameters
+
 - Vital signs trends (BP, heart rate, temperature, O2 saturation)
 - Laboratory values (hemoglobin, electrolytes, BUN, creatinine)
 - Treatment adherence (session frequency)
@@ -139,6 +153,7 @@ The system uses a multi-factor analysis approach:
 - Patient demographics and comorbidities
 
 ### Scoring Components
+
 - **Vitals Trend Score** (0-30 points): Analyzes abnormal vital signs patterns
 - **Lab Trend Score** (0-25 points): Evaluates laboratory value deviations
 - **Adherence Score** (0-20 points): Measures treatment compliance
@@ -147,6 +162,7 @@ The system uses a multi-factor analysis approach:
 - **Comorbidity Score** (0-10 points): Accounts for existing conditions
 
 ### Output Classifications
+
 - **Health Status**: Perfect → Optimal → Good → Fair → Poor → Critical
 - **Risk Score**: 0-100 (higher = more risk)
 - **Trend Direction**: Improving, Stable, Declining, Critical
@@ -156,6 +172,7 @@ The system uses a multi-factor analysis approach:
 ## Database Schema
 
 ### Main Tables
+
 - **patients**: Patient demographic and medical information
 - **dialysis_sessions**: Detailed session records with vitals and outcomes
 - **patient_health_analytics**: Calculated health trends and predictions
@@ -194,13 +211,71 @@ hemodialisa/
 - Authentication required for all dashboard routes
 - Middleware protection for sensitive routes
 
+## Development & Code Quality
+
+This project uses modern tooling to ensure code quality and consistency.
+
+### Available Scripts
+
+```bash
+# Development
+npm run dev          # Start development server
+npm run build        # Build for production
+npm start            # Start production server
+
+# Code Quality
+npm run lint         # Run ESLint
+npm run lint:fix     # Fix ESLint issues
+npm run format       # Format code with Prettier
+npm run format:check # Check formatting
+npm run type-check   # Run TypeScript type checking
+```
+
+### Git Hooks (Husky)
+
+Automated checks run before commits to maintain code quality:
+
+**Pre-commit:**
+
+- Formats code with Prettier
+- Lints with ESLint (auto-fixes when possible)
+- Type-checks TypeScript files
+
+**Commit-msg:**
+
+- Validates commit message format (Conventional Commits)
+
+### Commit Message Convention
+
+We follow [Conventional Commits](https://www.conventionalcommits.org/):
+
+```bash
+# Format
+<type>(<scope>): <subject>
+
+# Examples
+feat: add patient risk prediction algorithm
+fix: resolve session date formatting issue
+docs: update installation instructions
+refactor: extract AI logic into separate module
+```
+
+**Types:** `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed guidelines.
+
 ## Contributing
 
+We welcome contributions! Please follow these steps:
+
 1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+2. Create a feature branch (`git checkout -b feat/amazing-feature`)
+3. Make your changes following our code style
+4. Commit with conventional commit messages
+5. Push to your branch (`git push origin feat/amazing-feature`)
+6. Open a Pull Request
+
+Read [CONTRIBUTING.md](./CONTRIBUTING.md) for detailed contribution guidelines.
 
 ## License
 

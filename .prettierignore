@@ -1,0 +1,25 @@
+# Dependencies
+node_modules
+package-lock.json
+
+# Build outputs
+.next
+out
+dist
+build
+
+# Environment files
+.env*
+
+# Misc
+.DS_Store
+*.log
+*.tsbuildinfo
+
+# Git
+.git
+.husky
+
+# Supabase
+supabase/.branches
+supabase/.temp
